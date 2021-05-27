@@ -387,7 +387,7 @@ export default class TemplateCompletionProvider {
     });
   }
   async onComplete(root: string, params: CompletionFunctionParams): Promise<CompletionItem[]> {
-    log('provideCompletions');
+    // log('provideCompletions');
 
     if (params.type !== 'template') {
       return params.results;
@@ -400,18 +400,18 @@ export default class TemplateCompletionProvider {
 
     try {
       if (isNamedBlockName(focusPath)) {
-        log('isNamedBlockName');
+        // log('isNamedBlockName');
         // <:main>
         const yields = this.getParentComponentYields(focusPath.parent);
 
         completions.push(...yields);
       } else if (isAngleComponentPath(focusPath) && !isNamedBlockName(focusPath)) {
-        log('isAngleComponentPath');
+        // log('isAngleComponentPath');
         // <Foo>
         const candidates = this.getAllAngleBracketComponents(root, uri);
         const scopedValues = this.getScopedValues(focusPath);
 
-        log(candidates, scopedValues);
+        // log(candidates, scopedValues);
         completions.push(...uniqBy([...candidates, ...scopedValues], 'label'));
       } else if (isComponentArgumentName(focusPath)) {
         // <Foo @name.. />
@@ -461,7 +461,7 @@ export default class TemplateCompletionProvider {
         }
       } else if (isLocalPathExpression(focusPath)) {
         // {{foo-bar this.na?}}
-        log('isLocalPathExpression');
+        // log('isLocalPathExpression');
         const candidates = this.getLocalPathExpressionCandidates(uri, originalText).filter((el) => {
           return el.label.startsWith('this.');
         });
@@ -476,7 +476,7 @@ export default class TemplateCompletionProvider {
         completions.push(...uniqBy(candidates, 'label'));
       } else if (isMustachePath(focusPath)) {
         // {{foo-bar?}}
-        log('isMustachePath');
+        // log('isMustachePath');
         const candidates = this.getMustachePathCandidates(root);
         const localCandidates = this.getLocalPathExpressionCandidates(uri, originalText);
 
@@ -491,7 +491,7 @@ export default class TemplateCompletionProvider {
         completions.push(...emberMustacheItems);
       } else if (isBlockPath(focusPath)) {
         // {{#foo-bar?}} {{/foo-bar}}
-        log('isBlockPath');
+        // log('isBlockPath');
         const candidates = this.getBlockPathCandidates(root);
 
         if (isScopedPathExpression(focusPath)) {
@@ -504,7 +504,7 @@ export default class TemplateCompletionProvider {
         completions.push(...uniqBy(candidates, 'label'));
       } else if (isSubExpressionPath(focusPath)) {
         // {{foo-bar name=(subexpr? )}}
-        log('isSubExpressionPath');
+        // log('isSubExpressionPath');
         const candidates = this.getSubExpressionPathCandidates();
 
         completions.push(...uniqBy(candidates, 'label'));
@@ -521,7 +521,7 @@ export default class TemplateCompletionProvider {
         completions.push(...uniqBy(candidates, 'label'));
       } else if (isLinkToTarget(focusPath)) {
         // {{link-to "name" "target?"}}, {{#link-to "target?"}} {{/link-to}}
-        log('isLinkToTarget');
+        // log('isLinkToTarget');
 
         if (!this.meta.routesRegistryInitialized) {
           mListRoutes(this.project);
@@ -541,7 +541,7 @@ export default class TemplateCompletionProvider {
         completions.push(...results);
       } else if (isLinkComponentRouteTarget(focusPath)) {
         // <LinkTo @route="foo.." />
-        log('isLinkComponentRouteTarget');
+        // log('isLinkComponentRouteTarget');
 
         if (!this.meta.routesRegistryInitialized) {
           mListRoutes(this.project);
@@ -560,7 +560,7 @@ export default class TemplateCompletionProvider {
 
         completions.push(...results);
       } else if (isModifierPath(focusPath)) {
-        log('isModifierPath');
+        // log('isModifierPath');
 
         if (!this.meta.modifiersRegistryInitialized) {
           mListModifiers(this.project);
@@ -586,7 +586,7 @@ export default class TemplateCompletionProvider {
         completions.push(...uniqBy([...emberModifierItems, ...resolvedModifiers, ...builtinModifiers()], 'label'));
       }
     } catch (e) {
-      log('error', e);
+      logError(e);
     }
 
     if (this.hasNamespaceSupport) {

@@ -18,7 +18,7 @@ const PLACEHOLDER = 'ELSCompletionDummy';
 export default class TemplateCompletionProvider {
   constructor(private server: Server) {}
   getTextForGuessing(originalText: string, offset: number, PLACEHOLDER: string) {
-    log('getTextForGuessing', originalText, offset, PLACEHOLDER);
+    // log('getTextForGuessing', originalText, offset, PLACEHOLDER);
 
     return originalText.slice(0, offset) + PLACEHOLDER + originalText.slice(offset);
   }
@@ -63,10 +63,10 @@ export default class TemplateCompletionProvider {
             },
           });
 
-    log('originalText', originalText);
+    // log('originalText', originalText);
 
     if (originalText.trim().length === 0) {
-      log('originalText - empty');
+      // log('originalText - empty');
 
       return null;
     }
@@ -101,15 +101,15 @@ export default class TemplateCompletionProvider {
       try {
         validText = this.getTextForGuessing(originalText, offset, normalPlaceholder);
         ast = this.getAST(validText);
-        log('validText', validText);
+        // log('validText', validText);
         break;
       } catch (e) {
-        log('parsing-error', this.getTextForGuessing(originalText, offset, normalPlaceholder));
+        // log('parsing-error', this.getTextForGuessing(originalText, offset, normalPlaceholder));
         ast = null;
       }
     }
 
-    log('ast must exists');
+    // log('ast must exists');
 
     if (ast === null) {
       return null;
@@ -129,11 +129,11 @@ export default class TemplateCompletionProvider {
     };
   }
   async provideCompletions(params: TextDocumentPositionParams): Promise<CompletionItem[]> {
-    log('template:provideCompletions');
+    // log('template:provideCompletions');
     const ext = getExtension(params.textDocument);
 
     if (ext !== null && !extensionsToProvideTemplateCompletions.includes(ext)) {
-      log('template:provideCompletions:unsupportedExtension', ext);
+      // log('template:provideCompletions:unsupportedExtension', ext);
 
       return [];
     }

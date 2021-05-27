@@ -71,12 +71,12 @@ export default class ScriptCompletionProvider {
       return params.results;
     }
 
-    log('script:onComplete');
+    // log('script:onComplete');
     const completions: CompletionItem[] = params.results;
 
     try {
       if (isStoreModelLookup(focusPath) || isModelReference(focusPath)) {
-        log('isStoreModelLookup || isModelReference');
+        // log('isStoreModelLookup || isModelReference');
 
         if (!this.meta.modelsRegistryInitialized) {
           mListModels(this.project);
@@ -99,7 +99,7 @@ export default class ScriptCompletionProvider {
           });
         });
       } else if (isRouteLookup(focusPath)) {
-        log('isRouteLookup');
+        // log('isRouteLookup');
 
         if (!this.meta.routesRegistryInitialized) {
           mListRoutes(this.project);
@@ -122,7 +122,7 @@ export default class ScriptCompletionProvider {
           });
         });
       } else if (isNamedServiceInjection(focusPath)) {
-        log('isNamedServiceInjection');
+        // log('isNamedServiceInjection');
 
         if (!this.meta.servicesRegistryInitialized) {
           mListServices(this.project);
@@ -145,7 +145,7 @@ export default class ScriptCompletionProvider {
           });
         });
       } else if (isComputedPropertyArgument(focusPath)) {
-        log('isComputedPropertyArgument');
+        // log('isComputedPropertyArgument');
 
         if (!focusPath.parentPath || !focusPath.parentPath.parentPath) {
           return [];
@@ -154,7 +154,7 @@ export default class ScriptCompletionProvider {
         const node = closestScriptNodeParent(focusPath, 'ObjectExpression', ['ObjectProperty']) || closestScriptNodeParent(focusPath, 'ClassBody');
 
         if (node === null) {
-          log('isComputedPropertyArgument - unable to find keys');
+          // log('isComputedPropertyArgument - unable to find keys');
 
           return [];
         }
@@ -177,7 +177,7 @@ export default class ScriptCompletionProvider {
           }
         });
       } else if (isTransformReference(focusPath)) {
-        log('isTransformReference');
+        // log('isTransformReference');
 
         if (!this.meta.transformsRegistryInitialized) {
           mListTransforms(this.project);
@@ -201,10 +201,8 @@ export default class ScriptCompletionProvider {
         });
       }
     } catch (e) {
-      log('error', e);
+      logError(e);
     }
-
-    log('completions', completions);
 
     return completions;
   }

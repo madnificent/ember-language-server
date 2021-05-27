@@ -608,7 +608,7 @@ export default class Server {
       completionItems.push(...templateCompletions, ...scriptCompletions);
     } catch (e) {
       logError(e);
-      log('onCompletionError', textDocumentPosition, e, e.stack, e.toString());
+      //log('onCompletionError', textDocumentPosition, e, e.stack, e.toString());
     }
 
     // this.setStatusText('Running');
